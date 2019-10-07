@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Incentivize Spirometer</title>
+    
+    
+    <style type="text/css">
+<!--
+        body { background-color:#ededed; font:normal 12px/18px Arial, Helvetica, sans-serif; }
+        h1 { display:block; width:600px; margin:20px auto; padding-bottom:20px; font:normal 24px/30px Georgia, "Times New Roman", Times, serif; color:#333; text-shadow: 1px 2px 3px #ccc; border-bottom:1px solid #cbcbcb; }
+        #container { width:600px; margin:0 auto; }
+        #myCanvas { background:#fff; border:1px solid #cbcbcb; }
+        #nav { display:block; width:100%; text-align:center; }
+        #nav li { display:block; font-weight:bold; line-height:21px; text-shadow:1px 1px 1px #fff; width:100px; height:21px; padding:5px; margin:0 10px; background:#e0e0e0; border:1px solid #ccc; -moz-border-radius:4px;-webkit-border-radius:4px; border-radius:4px; float:left; }
+        #nav li a { color:#000; display:block; text-decoration:none; width:100%; height:100%; }
+    -->
+</style>
+
+<script type="text/javascript">
+	var context;
+	var dx= 4;
+	var dy=4;
+	var y = 800;
+	var y2 = 800;
+	var x = 40;
+	var service_url = "http://35.0.39.150/numbers/";
+	var canvas = document.getElementById("myCanvas");
+
+	function draw() {
+
+		var xmlHttp = null;
+		//var ss = httpGet("https://eos.mpogresearch.org/reports/ng.aspx");
+		var ss = httpGet(service_url);
+		var a = ss.split(",");
+		//alert(a[0]);
+		//if (y < 0 || y > 300)
+		var sensor1 = a[0];
+		var sensor2 = a[1];
+		
+		y = cap(sensor1);
+		y2 = cap(sensor2);
+		console.log("sensor1 "+y+", sensor2 "+y2);
+
+		context = myCanvas.getContext('2d');
+		context.clearRect(0, 0, 600, 800);
+		context.font = "12px Arial";		
+		
+		context.beginPath();
+		context.arc(x + 200, y, 20, 0, Math.PI * 2, true);
+		context.fillStyle = "#FFB733";
+		context.fillText(y,240,y);
+		context.fill();
+
+		context.closePath();
+		
+		context.beginPath();
+		context.fillStyle = "#ff0000";		
+		context.arc(x + 300, y2, 12, 0, Math.PI * 2, true);
+
+		context.closePath();
+		context.fill();
+		
+		//if( x<0 || x>300)
+		//    dx = -dx;    
+		//dy=-dy;
+		////x+=dx;
+		//y=dy;
+	}
+
+	function cap(curr) {  
+	  if(curr == '100') {
+		  return 20;
+	  } else if(curr == '0') {
+		  return 760;
+	  } else if(8 * curr > 760) {
+	      return 20;
+	  } else {
+		  return 760 - (8 * curr);
+	  }
+	}
+
+	function httpGet(theUrl) {
+		var xmlHttp = null;
+
+		xmlHttp = new XMLHttpRequest();
+		xmlHttp.open("GET", theUrl, false);
+		xmlHttp.send(null);
+		return xmlHttp.responseText;
+		
+	}
+
+	setInterval(draw,100); 
+</script>
+
+</head>
+<body>
+<h1>Incentivize Spirometer (Maize is Volume, Red is rate)</h1>
+<div id="container">
+	<canvas id="myCanvas" width="600" height="800"></canvas>
+</div>
+
+</body>
+</html>

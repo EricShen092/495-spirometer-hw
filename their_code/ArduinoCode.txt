@@ -1,0 +1,40 @@
+void loop() {
+int sensorValue = analogRead(A0);
+int sensorValue2 = analogRead(A2);
+//int voltage = map(sensorValue,977,158, 150, 2500);
+//int voltage2 = map(sensorValue2,0,700, 250, 2500);
+int voltage = sensorValue;
+
+int new_val = 0;
+
+/*if(voltage > 981){
+new_val = 200; 
+}else if(voltage > 975 ){
+new_val = 250; 
+}else if(voltage > 828 ){
+new_val = 500; 
+} else if(voltage > 607 ){
+new_val = 750; 
+} else if(voltage > 450 ){
+new_val = 1000; 
+} else if(voltage > 334 ){
+new_val = 1250; 
+} else if(voltage > 281 ){
+new_val = 1500; 
+} else if(voltage > 228 ){
+new_val = 1750; 
+} else if(voltage > 195 ){
+new_val = 2000; 
+} else if(voltage > 168 ){
+new_val = 2250; 
+} else if(voltage > 149 ){
+new_val = 2500; 
+} */
+
+int voltage2 = sensorValue2;
+String tmpstr = "s1=" + String(new_val) + "s1=" + String(voltage) + " s2=" + String(voltage2) + "\n";
+
+Serial.print(tmpstr);
+delay(200);
+
+}

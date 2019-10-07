@@ -1,0 +1,22 @@
+void setup() {
+  Serial.begin(115200);
+ }
+
+void loop() {
+  int sensorValue = analogRead(A0);
+  int sensorValue2 = analogRead(A2);
+
+  String tmpstr = "s1=" + String(sensorValue) + " s2=" + String(sensorValue2) + "\n";
+
+   writeString(tmpstr);
+  delay(200);
+}
+
+void writeString(String stringData) { // Used to serially push out a String with Serial.write()
+
+  for (int i = 0; i < stringData.length(); i++)
+  {
+    Serial.write(stringData[i]);   // Push each char 1 by 1 on each loop pass
+  }
+
+}// end writeString
