@@ -20,15 +20,17 @@ void setup() {
   sendCommand("AT",5,"OK");
   sendCommand("AT+CWMODE=1",5,"OK");
   sendCommand("AT+CWJAP=\""+ AP +"\",\""+ PASS +"\"",20,"OK");
+  
 }
 void loop() {
  valSensor = getSensorData();
  String getData = "GET /update?api_key="+ API +"&"+ field +"="+String(valSensor);
-sendCommand("AT+CIPMUX=1",5,"OK");
- sendCommand("AT+CIPSTART=0,\"TCP\",\""+ HOST +"\","+ PORT,15,"OK");
- sendCommand("AT+CIPSEND=0," +String(getData.length()+4),4,">");
- esp8266.println(getData);delay(1500);countTrueCommand++;
- //sendCommand("AT+CIPCLOSE=0",5,"OK");
+  sendCommand("AT+CIPMUX=1",5,"OK");
+  sendCommand("AT+CIPSTART=0,\"TCP\",\""+ HOST +"\","+ PORT,15,"OK");
+  sendCommand("AT+CIPSEND=0," +String(getData.length()+4),4,">");
+  esp8266.println(getData);
+  countTrueCommand++;
+  sendCommand("AT+CIPCLOSE=0",5,"OK");
 }
 int getSensorData(){
   return random(1000); // Replace with 
