@@ -1,12 +1,10 @@
 #include <SoftwareSerial.h>
 #define RX 10
 #define TX 11
-String AP = "Kartik's iPhone";       // CHANGE ME
-String PASS = "prnis6912"; // CHANGE ME
-String API = "XAX253L3NEEDKKGT";   // CHANGE ME
-String HOST = "api.thingspeak.com";
-String PORT = "80";
-String field = "field1";
+String AP = "DESKTOP-spiro";       // CHANGE ME
+String PASS = "testings"; // CHANGE ME
+String HOST = "35.3.49.165";
+String PORT = "8080";
 int countTrueCommand;
 int countTimeCommand; 
 boolean found = false; 
@@ -18,19 +16,21 @@ void setup() {
   Serial.begin(9600);
   esp8266.begin(115200);
   sendCommand("AT",5,"OK");
+  sendCommand("AT+RST",5,"OK");
   sendCommand("AT+CWMODE=1",5,"OK");
   sendCommand("AT+CWJAP=\""+ AP +"\",\""+ PASS +"\"",20,"OK");
-  
+  sendCommand("AT+CIPMUX=1",5,"OK");
+  sendCommand("AT+CIPSTART=0,\"UDP\",\""+ HOST +"\","+ PORT,15,"OK");
 }
 void loop() {
  valSensor = getSensorData();
- String getData = "GET /update?api_key="+ API +"&"+ field +"="+String(valSensor);
-  sendCommand("AT+CIPMUX=1",5,"OK");
-  sendCommand("AT+CIPSTART=0,\"TCP\",\""+ HOST +"\","+ PORT,15,"OK");
-  sendCommand("AT+CIPSEND=0," +String(getData.length()+4),4,">");
-  esp8266.println(getData);
-  countTrueCommand++;
-  sendCommand("AT+CIPCLOSE=0",5,"OK");
+ String getData = "POST /api/v1/reading "+String(valSensor)+","+String(valSensor);
+ sendCommand("AT+CIPSEND=0," +String(getData.length()+4),4,">");
+ esp8266.println(getData);
+ Serial.print(getData);
+ delay(50);
+ countTrueCommand++;
+ //sendCommand("AT+CIPCLOSE=0",5,"OK");
 }
 int getSensorData(){
   return random(1000); // Replace with 
