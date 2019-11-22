@@ -3,7 +3,7 @@
 #define TX 11
 String AP = "DESKTOP-spiro";       // CHANGE ME
 String PASS = "testings"; // CHANGE ME
-String HOST = "35.3.49.165";
+String HOST = "35.3.20.117";
 String PORT = "8080";
 int countTrueCommand;
 int countTimeCommand; 
@@ -15,6 +15,8 @@ SoftwareSerial esp8266(RX,TX);
 void setup() {
   Serial.begin(9600);
   esp8266.begin(115200);
+  pinMode(A5, INPUT);
+  pinMode(A4, INPUT);
   sendCommand("AT",5,"OK");
   sendCommand("AT+RST",5,"OK");
   sendCommand("AT+CWMODE=1",5,"OK");
@@ -23,8 +25,9 @@ void setup() {
   sendCommand("AT+CIPSTART=0,\"UDP\",\""+ HOST +"\","+ PORT,15,"OK");
 }
 void loop() {
- valSensor = getSensorData();
- String getData = "POST /api/v1/reading "+String(valSensor)+","+String(valSensor);
+ int sensor_volume = analogRead(A5);
+ int sensor_flow = analogRead(A4);
+ String getData = "POST /api/v1/reading "+String(sensor_volume)+","+String(sensor_flow);
  sendCommand("AT+CIPSEND=0," +String(getData.length()+4),4,">");
  esp8266.println(getData);
  Serial.print(getData);
@@ -32,9 +35,7 @@ void loop() {
  countTrueCommand++;
  //sendCommand("AT+CIPCLOSE=0",5,"OK");
 }
-int getSensorData(){
-  return random(1000); // Replace with 
-}
+
 void sendCommand(String command, int maxTime, char readReplay[]) {
   Serial.print(countTrueCommand);
   Serial.print(". at command => ");
