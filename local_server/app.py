@@ -1,36 +1,30 @@
 #!flask/bin/python
 from flask import Flask, jsonify, request
+from random import seed
+from random import randint
 
 app = Flask(__name__)
 
-values = []
+current_values = []
 
 @app.route('/')
-def index():
-    return jsonify({'values': values})
+def print_instructions():
+    return "Spirometer-Hardware Group REST API"
 
 @app.route('/api/v1/reading', methods=['GET'])
 def get_reading():
-    return jsonify({'values': values})
+    return jsonify({'values': current_values})
 
 @app.route('/api/v1/reading', methods=['POST'])
 def send_reading():
 
-    data = request.json
+    seed(1)
+    current_volume = randint(0, 3000)
+    current_values.append(current_volume)
+    current_flow = randint(0, 100)
+    current_flow.append(current_flow)
 
-
-    """
-    Push single sensor value data point.
-
-    Example:
-    {
-        "val": 1
-    }
-    """
-    # if not request.json or not 'value' in request.json:
-    #     flask.abort(400)
-    # values.append(request.json['value'])
-    return "hello"
+    return "Success"
 
 
 if __name__ == '__main__':
