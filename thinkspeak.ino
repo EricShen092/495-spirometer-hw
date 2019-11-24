@@ -3,7 +3,7 @@
 #define TX 11
 String AP = "DESKTOP-spiro";       // CHANGE ME
 String PASS = "testings"; // CHANGE ME
-String HOST = "35.3.20.117";
+String HOST = "35.1.5.132";
 String PORT = "8080";
 int countTrueCommand;
 int countTimeCommand; 
@@ -27,7 +27,9 @@ void setup() {
 void loop() {
  int sensor_volume = analogRead(A5);
  int sensor_flow = analogRead(A4);
- String getData = "POST /api/v1/reading "+String(sensor_volume)+","+String(sensor_flow);
+ Serial.print("\n AAAAAAAAAAA " + String(sensor_volume));
+ Serial.print("\n BBBBBBBBBBB " + String(sensor_flow));
+ String getData = "POST /api/v1/reading "+String(sensor_volume)+","+String(sensor_flow)+"\n";
  sendCommand("AT+CIPSEND=0," +String(getData.length()+4),4,">");
  esp8266.println(getData);
  Serial.print(getData);
