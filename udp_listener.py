@@ -4,7 +4,7 @@ import json
 import os
 
 # IP and Port Information
-UDP_IP = "35.1.117.224"
+UDP_IP = "35.3.69.34"
 UDP_PORT = 8080
 
 # Setting up logic to listen in on port
@@ -22,21 +22,33 @@ def max_normalize(val, old_max):
     return normalized
 
 def normalize_flow(flow):
-    zero = 620
-    return zero - flow  # change from decreasing with height to increasing.
+    zero = 337
+    return_value = zero - flow
+
+    if return_value < 0: 
+        return 0
+    elif return_value > 100:
+        return 100
+
+    return return_value * 10 # change from decreasing with height to increasing.
 
 def normalize_volume(vol):
-    zero = 970
-    return zero - vol
+    zero = 755 - 50
+    return_value = zero - vol
+
+    if return_value < 0: 
+        return_value = 0
+
+    return return_value * 10 
 
 def step_function(vol):
-    if vol <= 53:
+    if vol <= 40:
         return 0
-    elif vol < 76:
+    elif vol < 52:
         return 40
     elif vol < 81:
         return 60
-    elif vol >= 89:
+    elif vol >= 64:
         return 100
     else:
         return 80
@@ -51,9 +63,9 @@ while True:
         volume = normalize_volume(float(data[0]))
         flow_rate = normalize_flow(float(data[1].strip()))
 
-        volume = max_normalize(volume, 645)
+        #volume = max_normalize(volume, 645)
         # volume = step_function(volume)
-        flow_rate = max_normalize(flow_rate, 300)
+        #flow_rate = max_normalize(flow_rate, 300)
     except IndexError:
         continue
     except ValueError:
@@ -67,5 +79,5 @@ while True:
 
     
     # print ("Current Volume: " + str(volume) + str(step_function(volume)) + ", Current Flow Rate: " + str(flow_rate))
-    # print("Response: " + str(response))
-    print("Current Volume:", str(step_function(volume)), str(volume))
+    print("Response: " + str(response))
+    print("Current Volume:", str(volume), str(flow_rate))
