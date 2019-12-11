@@ -69,7 +69,7 @@ void loop() {
  countTrueCommand++;
 }
 
-void buttonISR() { buttonPressed = true; }
+void buttonISR() { buttonPressed = false; }
 
 void gotoSleep()
 {
