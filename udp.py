@@ -5,7 +5,7 @@ import json
 import os
 import re
 # IP and Port Information
-UDP_IP = "35.1.70.210"
+UDP_IP = "35.3.98.55"
 UDP_PORT = 8080
 # Setting up logic to listen in on port
 sock = socket.socket(socket.AF_INET, # Internet
@@ -26,14 +26,18 @@ def max_normalize(val, old_max):
         return new_max
     return normalized
 
-def normalize_flow(flow):
-    return_value = ZERO_FLOW - flow
-    if return_value < 0:
-        return 0
-    elif return_value > 20:
-        return 70
+def normalize_flow(flow, volume):
+    #return_value = ZERO_FLOW - flow
+    #if return_value < 0:
+    #    return 0
+    #elif return_value > 20:
+    #    return 70
+    #else:
+    #    return int((return_value * 3) + 10)
+    if volume != 0:
+        return random.randint(15, 50)
     else:
-        return int((return_value * 3) + 10)
+        return 0
 
 def normalize_volume(vol):
     return_value = ZERO_VOL - vol
@@ -41,6 +45,17 @@ def normalize_volume(vol):
         return_value = 0
     elif return_value >= 250:
         return 2500
+    
+    if return_value < 25:
+        return int(return_value * 2)
+    if return_value < 50:
+        return int(50 + ((return_value - 25) * 4))
+    if return_value < 100:
+        return int(150 + ((return_value - 50) * 6))
+    if return_value < 150:
+        return int(450 + (return_value - 100) * 10)
+    if return_value >= 150:
+        return int(850 + ((return_value - 150) * 18))
     return int(return_value * 10)
 
 
@@ -61,7 +76,7 @@ while True:
             initial_data.append((None, None))
             continue
         volume = normalize_volume(volume_raw)
-        flow_rate = normalize_flow(flow_raw)
+        flow_rate = normalize_flow(flow_raw, volume)
     except IndexError:
         continue
     except ValueError:
